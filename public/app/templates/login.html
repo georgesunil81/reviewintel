@@ -1,0 +1,46 @@
+<div layout="column" >
+		<md-toolbar class="md-toolbar-tools" layout-align="space-between center">
+		  <h1><strong>Login</strong></h1>
+		  <span>
+		  <md-button><a ui-sref="register">Register</a></md-button>
+		  <md-button><a ui-sref="landingpage">Home Page</a></md-button>
+		</span>
+		</md-toolbar>
+		<md-content>
+		  <form name="simple" novalidate
+		        layout-margin>
+		    <div layout="column">
+		      <md-input-container>
+		        <label>Username (Email ID)</label>
+		        <md-icon md-svg-src="images/icons/ic_email_24px.svg" class="name" style="color:orange;font:bold;" ></md-icon>
+		        <input name="name" type="email"
+		          ng-model="username"
+		          required />  <!--md-maxlength="32"-->
+		        <div ng-messages="simple.name.$error"
+		             ng-show="simple.name.$dirty">
+		          <div ng-message="required">Please provide an email address</div>
+		          <div ng-message="email">Type in a valid email address!</div>
+		        </div>
+		      </md-input-container>
+		      <md-input-container>
+		        <label>Password</label>
+		        <md-icon md-svg-src="images/icons/ic_visibility_24px.svg" class="name"></md-icon>
+		        <input type="password" name="password"
+		          ng-model="password"
+		          required />
+		        <div ng-messages="simple.password.$error"
+		          ng-show="simple.password.$dirty">
+		          <div ng-message="required">Please provide a password</div>          
+		        </div>
+		      </md-input-container>
+		    </div>
+		    <center><md-button class="md-raised md-primary" layout-align="center"
+		      ng-click="login()"
+		      ng-disabled="simple.$invalid" > 
+		      Login
+		    </md-button>
+		    
+		  </form>
+		  <div ng-if="error">{{error}}</div>
+		</md-content>
+	</div>

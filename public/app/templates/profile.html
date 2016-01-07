@@ -1,0 +1,20 @@
+<h2>My Profile</h2>
+<div>
+	Username: {{username}}
+	<br>
+	User: {{user}}
+</div>
+
+<br>
+<br>
+<br>
+
+<h4>Spoiler Menu Roles</h4>
+<a ng-if="is_admin" ui-sref="admin">Admin</a>
+<a ng-if="is_moderator" ui-sref="moderator">Moderator</a>
+<a ng-if="is_normal" ui-sref="home">Main</a>
+
+<br>
+<br>
+	<a ui-sref="logout">Logout</a>
+	<a ui-sref="auth.profile">Profile</a>

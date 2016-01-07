@@ -1,0 +1,55 @@
+    section#dashboard {
+      background-color: #E0E0E0; 
+    }
+    md-card {
+      background-color: white;
+      color: black;
+    }
+
+    md-card-footer {
+      background-color: #BBDEFB; 
+    }
+
+    md-card-header {
+      background-color: #BBDEFB; 
+    }
+
+    span.tag {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      background-color: #BDBDBD; 
+      color: black;
+      font-variant: small-caps;
+      margin-right: 8px;
+    }
+
+    .main-toolbar {
+      background-color: black;
+    }
+
+    /*.nav-toolbar {
+      background-color: black;
+    }*/
+
+
+    .md-autocomplete-suggestions li {
+      border-bottom: 1px solid #ccc;
+      height: auto;
+      padding-top: 8px;
+      padding-bottom: 8px;
+      white-space: normal;
+    }
+    .md-autocomplete-suggestions .list-title {
+      display: block;
+      line-height: 1.5;
+      font-size: 1.2em;
+    }
+    .md-autocomplete-suggestions .list-item {
+      display: block;
+      line-height: 1.5;
+    }
+
+    .my-drop-down {
+      background-color: #BBDEFB; /* Blue 100 */
+    }
