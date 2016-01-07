@@ -1,0 +1,21 @@
+{
+  "name": "reviewintel",
+  "homepage": "https://github.com/georgesunil81/reviewintel",
+  "authors": [
+    "George <georgesunil81@gmail.com>"
+  ],
+  "description": "reviewintel",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "highcharts-ng": "~0.0.11"
+  }
+}
