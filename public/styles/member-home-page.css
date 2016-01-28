@@ -7,12 +7,16 @@
     }
 
     md-card-footer {
-      background-color: #BBDEFB; 
+      /*background-color: #BBDEFB; */
+      background-color: green; 
     }
 
+    
+    
     md-card-header {
       background-color: #BBDEFB; 
-    }
+    } 
+    
 
     span.tag {
       display: inline-block;
@@ -24,14 +28,19 @@
       margin-right: 8px;
     }
 
+    
     .main-toolbar {
       background-color: black;
     }
+    
 
     /*.nav-toolbar {
       background-color: black;
     }*/
 
+
+
+/*
 
     .md-autocomplete-suggestions li {
       border-bottom: 1px solid #ccc;
@@ -53,3 +62,5 @@
     .my-drop-down {
       background-color: #BBDEFB; /* Blue 100 */
     }
+
+    */

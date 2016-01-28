@@ -1,11 +1,11 @@
 <div id="page">
 
     <header>
-        <a class="logo" title="ReviewINTEL" href="#"><span>ReviewINTEL</span></a>
+        <a class="logo" title="ReviewINTEL" href="#"><p>ReviewINTEL</p></a>
 
         <div class="hero">
             <h1>Get insights from product reviews</h1>
-            <a class="btn" title="Get advice from top Amazon Marketplace experts" href="#">Get advice from top Amazon marketplace experts</a>
+            <span><a class="btn" title="Get advice from top Amazon Marketplace experts" href="http://services.amazon.com/fulfillment-by-amazon/benefits.htm" target="_blank">Get advice from top Amazon marketplace experts</a></span>
         </div>
     </header>
 
@@ -13,22 +13,25 @@
 
         <aside>
             <div class="content trending">
-                <h3><a href="#">What&apos;s trending</a></h3>
-                <p>Lorem ipsum dolor sit amet, consect etuer adipiscing elit. <a href="#">Morbi commodo</a>, ipsum sed pharetra gravida, orci magna rhoncus neque, id pulvinar odio lorem non turpis.</p>
+                <h3><a href="http://services.amazon.com/blog/ref=asus_blog_hnav" target="_blank">What&apos;s trending</a></h3>
+                <p>See what is trending in terms of products and services on Amazon, view success stories from real sellers, how they envisioned their products and used the FBA service for fulfillment.</p>
+                <!--p>Lorem ipsum dolor sit amet, consect etuer adipiscing elit. <a href="#">Morbi commodo</a>, ipsum sed pharetra gravida, orci magna rhoncus neque, id pulvinar odio lorem non turpis.</p-->
             </div>
         </aside>
 
         <aside>
             <div class="content find-it">
-                <h3><a href="#">Where to find it</a></h3>
-                <p>Morbi commodo, ipsum sed pharetra gravida, orci magna rhoncus neque, id pulvinar odio lorem non turpis. Nullam sit amet enim. Lorem ipsum dolor sit amet, consect.</p>
+                <h3><a href="http://services.amazon.com/content/amazon-seller-services-products.htm/ref=asus_all_hnav" target="_blank">Where to find it</a></h3>
+                <p>It can take years to establish secure online transaction tools, process orders promptly and provide world-class customer service. Amazon has been doing all that and more for years.</p>
+                <!--p>Morbi commodo, ipsum sed pharetra gravida, orci magna rhoncus neque, id pulvinar odio lorem non turpis. Nullam sit amet enim. Lorem ipsum dolor sit amet, consect.</p-->
             </div>
         </aside>
 
         <aside>
             <div class="content tools">
-                <h3><a href="#">Tools of the trade</a></h3>
-                <p>Nullam sit amet enim. Lorem ipsum dolor sit amet, consect etuer adipiscing elit. Morbi commodo, ipsum sed pharetra gravida, orci rhoncus neque, id pulvinar odio.</p>
+                <h3><a href="http://services.amazon.com/content/seller-resources-how-to-guides.htm/ref=asus_tut_hnav" target="_blank">Tools of the trade</a></h3>
+                <p>&nbsp;Looking for hands-on tutorials and guides to walk you through? View step-by-step guides and tutorials to help you get started as well as grow your business with Amazon.</p>
+                <!--p>Nullam sit amet enim. Lorem ipsum dolor sit amet, consect etuer adipiscing elit. Morbi commodo, ipsum sed pharetra gravida, orci rhoncus neque, id pulvinar odio.</p-->
             </div>
         </aside>
 
@@ -37,8 +40,8 @@
     <section class="atmosphere">
         <article>
             <h2>Delight your customers</h2>
-            <p>Morbi commodo, ipsum sed pharetra gravida, orci magna rhoncus neque, id pulvinar odio lorem non turpis. Lorem ipsum dolor sit amet etuer adipiscing elit. Pulvinar odio lorem non turpis. Nullam sit amet enim lorem.</p>
-            <a class="btn" title="Delight your customers" href="#">Learn more</a>
+            <p>When customers place an order on Amazon for your products that are fulfilled by Amazon, they'll receive the same customer-obsessed, award-winning service Amazon is known for worldwide. We'll take care of customer questions about packing, delivery, and returns for you.</p>
+            <a class="btn" title="Delight your customers" href="http://services.amazon.com/fulfillment-by-amazon/benefits.htm/ref=asus_gen_all_fba_cus" target="_blank">Learn more</a>
         </article>
     </section>
 
@@ -48,53 +51,80 @@
             <div class="content">
                 <img alt="Manage Product Reviews" title="Manage Product Reviews" src="images/photo_seating.jpg">
                 <h4>How-To: Manage Product Reviews</h4>
-                <p>Consectetuer adipiscing elit. Morbi commodo ipsum sed gravida orci magna rhoncus pulvinar odio lorem.</p>
-                <a title="Learn how to manage your product reviews." href="#">Learn more</a>
+                <p>This application helps you manage reviews that your customers have put on Amazon for your products or services. Do register and take our application for a test ride!</p>
+                <!-- <a title="Learn how to manage your product reviews." href="#">Learn more</a> -->
+                <a title="RegisterForTestDrive" ng-controller="registerDiagCtrl" ng-click="showTabDialogForRegistration($event)">Register</a>
             </div>
         </aside>
 
+
+        
+
         <aside>
+            
             <div class="content">
                 <img alt="Manage Customers" title="Manage Customers" src="images/photo_lighting.jpg">
                 <h4>How-To: Manage Customers</h4>
-                <p>Morbi commodo, ipsum sed pharetra gravida magna rhoncus neque id pulvinar odio lorem non turpis nullam sit amet.</p>
-                <a title="Learn how to manage your customers." href="#">Learn more</a>
+                <p>An update to this application, currently in design, will allow you to manage your customer tiers based on the review ratings they have provided for your products or services on Amazon. </p>
+                <!--br />
+                Watch for this space. -->
+
+                <!-- This way you can target specific customer levels and direct relevant marketing content to them.-->
+                <!--a title="Learn how to manage your customers." href="#">Coming soon</a-->
             </div>
+            
         </aside>
 
+        
+
         <blockquote>
-            <p class="quote">Lorem ipsum dolor sit amet conse ctetuer adipiscing elit. Morbi comod sed dolor sit amet consect adipiscing elit.</p>
-            <p class="credit"><strong>Author Name</strong>
-                <br><em>Business Title</em>
-                <br>Company</p>
+            <p class="quote">Quality in a service or product is not what you put into it. It is what the customer gets out of it</p>
+            <p class="credit"><strong>Peter Drucker</strong><br /><br /><br /><br /><br />
+                <!--br><em>Business Title</em>
+                <br>Company-->
+            </p>
         </blockquote>
 
     </section>
 
     <nav>
         <ul>
-            <li>
-                <a title="About Us" href="#">About Us</a>
-                <ul>
+            <!--li>
+                <a title="About Us" href="#">About</a-->
+                <!--ul>
                     <li>
                         <a title="ReviewINTEL" href="#">ReviewINTEL</a>
                     </li>
                     
-                </ul>
+                </ul-->
+            <!--/li-->
+
+            <li>
+                <a title="Register" ng-controller="registerDiagCtrl" ng-click="showTabDialogForRegistration($event)">Register</a>
             </li>
 
             <li>
+                <a title="Login" ng-controller="loginCtrl" ng-click="showTabDialog($event)">Login</a>                        
+                <!--ul>
+                    <li>
+                        <a title="Login" ng-controller="loginCtrl" ng-click="showTabDialog($event)">Login</a>                        
+                    </li>                    
+                </ul>
+
+
                 <a title="Members" href="#">Members</a>
                 <ul>
                     <li>
                         <a title="Login" ng-controller="loginCtrl" ng-click="showTabDialog($event)">Login</a>                        
                     </li>                    
-                </ul>
+                </ul-->
+
+
             </li>
 
-            <li>
+            <!--li>
                 <a title="Contact Us" href="#">Contact Us</a>
-            </li>
+            </li-->
 
 
         </ul>
@@ -102,10 +132,10 @@
 
     <footer>
         &copy; ReviewINTEL
-        <div class="content">
+        <!--div class="content">
             <a title="Privacy Policy" href="#">Privacy Policy</a>
             <a title="Terms of Service" href="#">Terms of Service</a>
-        </div>
+        </div-->
     </footer>
 
 </div>

@@ -8,6 +8,8 @@ var port = 9091;
 
 var mongoose = require('mongoose');
 
+var secrets = require('./secrets.js');
+
 //mongoose.connect('mongodb://localhost/ReviewINTEL_1');
 // Here we find an appropriate database to connect to, defaulting to localhost if we don't find one.
 var uristring = process.env.MONGOLAB_URI || 'mongodb://localhost/ReviewINTEL_1';
@@ -62,7 +64,7 @@ app.use(bodyParser.json());
 
 //Need to externalize the session secret key below into a separate file and add that to .gitignore
 app.use(session({
-    secret: 'THISis AMZING THE FRCE IS WITH US',
+    secret: secrets.secret,
     resave: false, // deprecated to leave undefined 
     saveUninitialized: false
 }));
@@ -104,7 +106,7 @@ app.get('/api/users/currentUser', requireAuth, function(req, res) {
 });
 
 
-//registration
+//user registration
 app.post('/api/userRegistration', function(req, res) {
     
     User.findOne({
@@ -123,6 +125,54 @@ app.post('/api/userRegistration', function(req, res) {
         });
     });
 });
+
+//demo user registration
+app.post('/api/demoUserRegistration', function(req, res) {
+
+    //console.log("Demo user registration...");
+    
+    User.findOne({
+        username: req.body.username
+    }).exec().then(function(user) {
+        if (user) {
+            return res.status(409).end();
+        }
+        
+        user = new User({
+            username: req.body.username,
+            password: req.body.password
+        });
+        user.save(function(err, userObj) {
+            //console.log("The demo user db id is ", userObj._id);
+
+
+
+var newUserWithProduct = new Products();
+    newUserWithProduct.ASIN = "B003GEKXRM"; //B00J22TM7Y";//"B00NWXBYHU";  //assign demo ASIN to the demo user
+    newUserWithProduct.BusinessID = mongoose.Types.ObjectId(userObj._id);
+    newUserWithProduct.Locale = "www.amazon.com";
+    newUserWithProduct.Category = "ASIN Category 1";
+
+    newUserWithProduct.save(function(err, result) {
+        if (err) {
+            res.status(500).json(err);
+        } else {
+            //res.json(result);
+            //console.log("ASIN successfully allocated to demo user...");
+            return res.status(201).end();
+        }
+    });
+
+
+
+
+
+
+            //return res.status(201).end();
+        });
+    });
+});
+
 
 //login
 app.post('/api/auth/local', passport.authenticate('local'), function(req, res) {
@@ -338,6 +388,92 @@ app.post('/api/addProductForUser', requireAuth, function(req, res) {
     });
 });
 //End of All User Management API endpoints
+
+
+//Endpoints to generate line and stacked bar charts
+
+
+app.get('/api/getReviewSumOfUsefulBy/:ASIN', requireAuth, function(req, res) {
+    ReviewDetail.aggregate([
+        {
+            "$match": {
+                "ASIN": req.params.ASIN
+            }
+        },
+        {
+            "$group": {
+                "_id": "$ASIN",
+                "sumFoundUsefulBy": {
+                    "$sum": "$ReviewFoundUsefulBy"
+                }
+            }
+        }
+    ]).exec().then(function(getReviewSumOfUsefulBy) {
+        return res.json(getReviewSumOfUsefulBy);
+    });
+});
+
+
+app.get('/api/getReviewSumOfUsefulOutOf/:ASIN', requireAuth, function(req, res) {
+    ReviewDetail.aggregate([
+        {
+            "$match": {
+                "ASIN": req.params.ASIN
+            }
+        },
+        {
+            "$group": {
+                "_id": "$ASIN",
+                "sumFoundUsefulOutOf": {
+                    "$sum": "$ReviewFoundUsefulOutOf"
+                }
+            }
+        }
+    ]).exec().then(function(getReviewSumOfUsefulOutOf) {
+        return res.json(getReviewSumOfUsefulOutOf);
+    });
+});
+
+
+app.get('/api/getNumberOfReviewsByDate/:ASIN', requireAuth, function(req, res) {
+
+    var today = new Date();
+    var priorDate = new Date().setDate(today.getDate()-75);
+    priorDate = new Date(priorDate).toISOString();
+    //console.log("priorDate=", priorDate);
+
+
+    ReviewDetail.aggregate([
+    {
+        "$match": {
+            "ASIN": req.params.ASIN
+        }
+    }, 
+
+    {
+            "$match": {
+                "ReviewDate": { $gte: new Date(priorDate) }               //'2012-07-01T04:00:00Z'
+            }
+    },
+  
+
+    {
+        "$group": {
+            "_id": "$ReviewDate",
+            "count": {
+                "$sum": 1
+            }
+        }
+    }
+
+    ]).exec().then(function(getNumberOfReviewsByDate) {
+        return res.json(getNumberOfReviewsByDate);
+    });
+});
+
+
+
+//Endof Endpoints to generate line and stacked bar charts
 
 
 app.listen(process.env.PORT || port);

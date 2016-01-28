@@ -19,6 +19,12 @@ function MemberHomePageController($rootScope, $scope, $mdMedia, $mdSidenav, $tim
     }];
     var countOfReviewsByRatingFirstPageStats = [0, 0, 0, 0, 0];
 
+    var countOfNeutralUsefulness = [0];
+    var countOfUsefulness = [0];
+    var countOfReviewsByDateArrayOfDates = [];
+    var countOfReviewsByDateArrayOfCounts = [];
+
+
     $scope.is_admin = userService.checkRole('Admin');
     $scope.is_mentor_org_owner = userService.checkRole('MentorOrgOwner');
     $scope.is_mentor = userService.checkRole('Mentor');
@@ -79,7 +85,8 @@ function MemberHomePageController($rootScope, $scope, $mdMedia, $mdSidenav, $tim
             for (var i = 0; i < res.data.length; i++) {
                 console.log("i=", i, " rating data=", res.data[i]._id);
                 console.log("i=", i, " count data=", res.data[i].avgRating);
-                avgRating[i] = res.data[i].avgRating;
+                //avgRating[i] = res.data[i].avgRating;
+                avgRating[i] = Number((res.data[i].avgRating).toFixed(2)); //res.data[i].avgRating.toFixed(2);
             }
 
             console.log("2)Count of reviews by getAverageRating: ", avgRating);
@@ -133,6 +140,61 @@ function MemberHomePageController($rootScope, $scope, $mdMedia, $mdSidenav, $tim
             }
 
             console.log("2)Count of reviews by rating: ", countOfReviewsByRatingFirstPageStats);
+
+            return MemberHomePageService.getReviewSumOfUsefulBy(ASIN);
+        })
+        .then (function(res) {
+            console.log("********************getReviewSumOfUsefulBy: ", res.data[0].sumFoundUsefulBy);
+
+            //var countOfNeutralUsefulness = [];
+            //countOfUsefulness.push(res.data[0].sumFoundUsefulBy);
+            countOfUsefulness[0] = res.data[0].sumFoundUsefulBy;
+
+            return MemberHomePageService.getReviewSumOfUsefulOutOf(ASIN);
+        })
+        .then (function(res) {
+            console.log("********************getReviewSumOfUsefulOutOf: ", res.data[0].sumFoundUsefulOutOf);
+
+            countOfNeutralUsefulness[0] = res.data[0].sumFoundUsefulOutOf - countOfUsefulness[0];
+
+            return MemberHomePageService.getNumberOfReviewsByDate(ASIN);
+
+
+
+        })
+        .then (function(res) {
+
+            console.log("SORTING********************getNumberOfReviewsByDate: ", res);
+
+
+            var d;
+
+            //d = new Date('2013-03-10T02:00:00Z');
+            //this sorting has to be done on the client side here, since mongoose aggregate sort does not work on group pipes.
+            res.data.sort(function(a,b) { 
+                return new Date(a._id).getTime() - new Date(b._id).getTime() 
+            });
+
+            //d.toLocaleDateString();
+
+            for (var i = 0; i < res.data.length; i++) {
+
+                d = new Date(res.data[i]._id);                
+
+                //countOfReviewsByDateArrayOfDates.push(res.data[i]._id);
+                countOfReviewsByDateArrayOfDates.push(d.toLocaleDateString());
+                countOfReviewsByDateArrayOfCounts.push(res.data[i].count);
+            }
+
+
+            $scope.chartConfig1.loading = false;
+            $scope.chartConfig2.loading = false;
+            $scope.chartConfig3.loading = false;
+            $scope.chartConfig4.loading = false;
+            $scope.chartConfig5.loading = false;
+            $scope.chartConfig6.loading = false;
+
+
         });
 
 
@@ -220,6 +282,9 @@ function MemberHomePageController($rootScope, $scope, $mdMedia, $mdSidenav, $tim
 
     $scope.showTags = function() {
         $mdSidenav('tagsFilter').open();
+        console.log("Sidenav opened...");
+        //$rootScope.$broadcast('sidenav.closed');
+        $scope.$broadcast('highchartsng.reflow');   //this will trigger the reflow function of all the charts
     };
 
     $scope.enableCloseTags = function() {
@@ -228,7 +293,39 @@ function MemberHomePageController($rootScope, $scope, $mdMedia, $mdSidenav, $tim
 
     $scope.closeTags = function() {
         $mdSidenav('tagsFilter').close();
+
+        console.log("Sidenav closed...");
+        //$rootScope.$broadcast('sidenav.closed');
+        $scope.$broadcast('highchartsng.reflow');   //this will trigger the reflow function of all the charts
     };
+
+    // Listen to window resize and update width.
+    $scope.$on('window.resize', function() {
+        console.log('window resized...');
+        //$scope.$broadcast('highchartsng.reflow');
+
+        $timeout(function() {
+                console.log("Going to reflow charts...");
+                $scope.$broadcast('highchartsng.reflow');
+            }, 500);
+        //$timeout( function() {        
+        //    var element = document.getElementById("chart1");
+        //    console.log(element);
+        //    $compile(element)($scope)
+        //}); 
+    });
+        // Listen to window resize and update width.
+    $scope.$on('sidenav.closed', function() {
+        console.log('sidenav.closed...');
+        //$timeout( function() {        
+        //    var element = document.getElementById("chart1");
+        //    console.log(element);
+        //    $compile(element)($scope)
+        //}); 
+        //$timeout(function() {
+                $scope.chartConfig1.func($scope.chartConfig1);
+            //}, 0);
+    });
 
     $scope.showFiltered = function() {
         return tagsHidden() && getFilteredTags().length > 0;
@@ -338,6 +435,7 @@ function MemberHomePageController($rootScope, $scope, $mdMedia, $mdSidenav, $tim
     }
 
 
+    /*
     $scope.chartConfig1 = {
 
         options: {
@@ -380,7 +478,8 @@ function MemberHomePageController($rootScope, $scope, $mdMedia, $mdSidenav, $tim
         },
 
         loading: false
-    }
+    } 
+    */
 
     $scope.chartConfig2 = {
 
@@ -424,7 +523,7 @@ function MemberHomePageController($rootScope, $scope, $mdMedia, $mdSidenav, $tim
             }, 0);
         },
 
-        loading: false
+        loading: true
     }
 
     $scope.chartConfig3 = {
@@ -454,7 +553,7 @@ function MemberHomePageController($rootScope, $scope, $mdMedia, $mdSidenav, $tim
             }, 0);
         },
 
-        loading: false
+        loading: true
     }
 
     $scope.chartConfig4 = {
@@ -500,10 +599,258 @@ function MemberHomePageController($rootScope, $scope, $mdMedia, $mdSidenav, $tim
             }, 0);
         },
 
-        loading: false
+        loading: true
     }
+
+    $scope.chartConfig1 = {
+
+        options: {
+        chart: {
+            type: 'gauge',
+            plotBackgroundColor: null,
+            plotBackgroundImage: null,
+            plotBorderWidth: 0,
+            plotShadow: true
+        },
+
+        title: {
+            text: 'Avg. Review Rating...'
+        },
+
+        pane: {
+            startAngle: -90,
+            endAngle: 90,
+            background: [{
+                backgroundColor: {
+                    linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                    stops: [
+                        [0, '#FFF'],
+                        [1, '#333']
+                    ]
+                },
+                borderWidth: 0,
+                outerRadius: '109%'
+            }, {
+                backgroundColor: {
+                    linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                    stops: [
+                        [0, '#333'],
+                        [1, '#FFF']
+                    ]
+                },
+                borderWidth: 1,
+                outerRadius: '107%'
+            }, {
+                // default background
+            }, {
+                backgroundColor: '#DDD',
+                borderWidth: 0,
+                outerRadius: '105%',
+                innerRadius: '103%'
+            }]
+        }},
+
+        // the value axis
+        yAxis: {
+            min: 0,
+            max: 5,
+
+            minorTickInterval: 'auto',
+            minorTickWidth: 1,
+            minorTickLength: 10,
+            minorTickPosition: 'inside',
+            minorTickColor: '#666',
+
+            tickPixelInterval: 30,
+            tickWidth: 2,
+            tickPosition: 'inside',
+            tickLength: 10,
+            tickColor: '#666',
+            labels: {
+                step: 2,
+                rotation: 'auto'
+            },
+            title: {
+                text: 'Avg. Rating'
+            },
+            plotBands: [{
+                from: 0,
+                to: 3,
+                color: '#DF5353' // green
+            }, {
+                from: 3,
+                to: 4,
+                color: '#DDDF0D' // yellow
+            }, {
+                from: 4,
+                to: 5,
+                color: '#55BF3B' // red
+            }]
+        },
+
+        series: [{
+            name: 'Avg. Review Rating',
+            data: avgRating,//[3.75],
+            tooltip: {
+                valueSuffix: ' stars'
+            }
+        }],
+
+        func: function(chartConfig1) {
+            $timeout(function() {
+                chartConfig1.reflow();
+            }, 0);
+        },
+
+        loading: true
+    }    
+
+
+
+
+    $scope.chartConfig5 = {
+
+        options: {
+            chart: {
+            type: 'line'
+        },
+        title: {
+            text: 'Frequency of reviews'
+        },
+        subtitle: {
+            text: 'By Review Date'
+        },
+        xAxis: {
+            categories: countOfReviewsByDateArrayOfDates //['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        },
+        yAxis: {
+            title: {
+                text: 'Number of Reviews'
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: false
+            }
+        },
+
+            credits: {
+                enabled: false
+            }
+
+        },
+        series: [{
+            name: 'Review Date',
+            data: countOfReviewsByDateArrayOfCounts //[7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+        }],
+
+        func: function(chartConfig5) {
+            $timeout(function() {
+                chartConfig5.reflow();
+            }, 0);
+        },
+
+        loading: true
+    }
+
+    $scope.chartConfig6 = {
+
+        options: {
+            chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Review usefulness'
+        },
+        xAxis: {
+            categories: ['Review Usefulness']
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Total Review Opinions'
+            },
+            stackLabels: {
+                enabled: true,
+                style: {
+                    fontWeight: 'bold',
+                    color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                }
+            }
+        },
+        legend: {
+            align: 'right',
+            x: -30,
+            verticalAlign: 'top',
+            y: 25,
+            floating: true,
+            backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+            borderColor: '#CCC',
+            borderWidth: 1,
+            shadow: false
+        },
+        tooltip: {
+            headerFormat: '<b>{point.x}</b><br/>',
+            pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+        },
+        plotOptions: {
+            column: {
+                stacking: 'normal',
+                dataLabels: {
+                    enabled: true,
+                    color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+                    style: {
+                        textShadow: '0 0 3px black'
+                    }
+                }
+            }
+        },
+
+            credits: {
+                enabled: false
+            }
+
+        },
+        series: [{
+            name: 'Neutral',
+            data: countOfNeutralUsefulness //[5]
+        }, {
+            name: 'Found Useful',
+            data: countOfUsefulness //[2]
+        }],
+
+        func: function(chartConfig6) {
+            $timeout(function() {
+                chartConfig6.reflow();
+            }, 0);
+        },
+
+        loading: true
+    }   
+
+    
+
+
+
+
+    
+
 
 
 } //End of function MemberHomePageController
 
 
+/*
+
+
+
+
+
+
+
+
+
+*/

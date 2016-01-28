@@ -62,7 +62,7 @@
       <span flex></span>
       <md-button class="md-icon-button"
         ng-show="enableCloseTags()">
-        <md-icon ng-click="closeTags()">
+        <md-icon ng-show=!is_admin ng-click="closeTags()">
           close
         </md-icon>
       </md-button>
@@ -93,12 +93,12 @@
       <md-button><a ui-sref="administration" style="text-decoration: none;">Review Factors</a></md-button>
 
       <span flex></span>
-      <md-button class="md-icon-button"
+      <!--md-button class="md-icon-button"
         ng-show="enableCloseTags()">
         <md-icon ng-click="closeTags()">
           close
         </md-icon>
-      </md-button>
+      </md-button-->
   </md-toolbar>
 
   <md-content ng-show="(is_business_owner || is_admin)" layout-padding>
@@ -158,12 +158,12 @@
     <md-toolbar class="md-toolbar-tools">
       <md-button><a ui-sref="logout" style="text-decoration: none;">Log Out</a></md-button>
       <span flex></span>
-      <md-button class="md-icon-button"
+      <!--md-button class="md-icon-button"
         ng-show="enableCloseTags()">
         <md-icon ng-click="closeTags()">
           close
         </md-icon>
-      </md-button>
+      </md-button-->
 
     </md-toolbar>
 
@@ -213,7 +213,40 @@
           <md-card-footer>                        
           </md-card-footer>
         </md-card>
-      </div>  
+      </div>
+
+      <div flex="33" flex-md="50" flex-sm="100">
+        <md-card>
+          <md-card-content>            
+            <highchart id="chart1" config="chartConfig5"></highchart>            
+          </md-card-content>
+          <md-card-footer>                        
+          </md-card-footer>
+        </md-card>
+      </div>
+
+      <div flex="33" flex-md="50" flex-sm="100">
+        <md-card>
+          <md-card-content>            
+            <highchart id="chart1" config="chartConfig6"></highchart>            
+          </md-card-content>
+          <md-card-footer>                        
+          </md-card-footer>
+        </md-card>
+      </div>
+
+      <!--div flex="33" flex-md="50" flex-sm="100">
+        <md-card>
+          <md-card-content>            
+            <highchart id="chart1" config="chartConfig5"></highchart>            
+          </md-card-content>
+          <md-card-footer>                        
+          </md-card-footer>
+        </md-card>
+      </div-->
+
+
+
     </section>
 
     <!-- section for registration -->
@@ -434,19 +467,25 @@
           </div>
         </div>
   </form>
+  
   <md-divider></md-divider>
+  <hr />
+  <br />
 
   <form>
-    Selected user:<code>{{user.username}}</code>
+    <strong>Selected user:</strong><code>{{user.username}}</code>
     <br />
     For the selected user, please update the current product ID (ASIN) here: 
     <input type="text" ng-model="ASINValue">    
     <button type="submit" ng-click=editUser(user._id)>Update</button>
   </form>
 
-  <md-divider></md-divider>
   <br />
-  Status: <strong>{{StatusMessage}}</strong>
+  <hr />
+  <md-divider></md-divider>
+
+  <br />
+  <strong>Status:</strong> <strong>{{StatusMessage}}</strong>
 
     </section>
     <!-- END of section for user management -->

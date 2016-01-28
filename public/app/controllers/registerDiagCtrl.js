@@ -1,4 +1,5 @@
-angular.module('ReviewINTEL').controller('loginCtrl', function($scope, $mdDialog, $mdMedia, userService, $state) {
+angular.module('ReviewINTEL').controller('registerDiagCtrl', function($scope, $mdDialog, $mdMedia, userService, $state) {
+
     $scope.status = '  ';
     $scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
     $scope.showAlert = function(ev) {
@@ -52,12 +53,10 @@ angular.module('ReviewINTEL').controller('loginCtrl', function($scope, $mdDialog
             $scope.customFullscreen = (wantsFullScreen === true);
         });
     };
-    $scope.showTabDialog = function(ev) {
-        console.log("Comes in to show tab dialog for login");
-
+    $scope.showTabDialogForRegistration = function(ev) {
         $mdDialog.show({
-                controller: DialogController,
-                templateUrl: '../app/templates/loginDiag.html',
+                controller: RegisterDialogController,
+                templateUrl: '../app/templates/registerDiag.html',
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose: true
@@ -70,11 +69,16 @@ angular.module('ReviewINTEL').controller('loginCtrl', function($scope, $mdDialog
     };
 });
 
-function DialogController($scope, $mdDialog, userService, $state) {
+
+
+
+
+
+
+function RegisterDialogController($scope, $mdDialog, userService, $state) {
 
     // Set the default value of inputType
     $scope.inputType = 'password';
-
 
     $scope.hide = function() {
         $mdDialog.hide();
@@ -86,26 +90,28 @@ function DialogController($scope, $mdDialog, userService, $state) {
         $mdDialog.hide(answer);
     };
 
+    $scope.registerDemoUser = function() {
 
-    $scope.login = function() {
-
-        console.log("Coming in to log the user in...");
-
-        userService.login({
+        userService.addDemoUser({
             username: $scope.username,
             password: $scope.password
-        }).then(function() {
-
-            console.log("User validated as a valid user...");
-            $mdDialog.hide(); //hide the login dialog since the user is valid...
-
-            userService.getAuthedUser(); //this will load current user into cache as well as trigger event broadcast for directives
-            $state.go('auth.memberHomePage');
-            $scope.credentials = {}
+        }).then(function(res) {
+            //$state.go('auth.spoilers');
+            //$scope.error = "User '" + $scope.username + "' successfully registered. You may now log in.";
+            $scope.error = "Registered. You may now log in.";
         }).catch(function(err) {
-            console.log("Login error ", err);
+            console.log("Registration error " + err);
+            if (err.status) {
+                $scope.error = "Sorry, that user already exists. Please choose another username.";
+            }
         });
+    }
 
+    $scope.registeredUser = {};
+
+    $scope.registerUser = function(user) {
+
+        $scope.registeredUser = user;
     }
 
     $scope.showOrHide = function () {
@@ -117,19 +123,5 @@ function DialogController($scope, $mdDialog, userService, $state) {
             $scope.inputType = 'password';
         }
     }
-
-    $scope.$on('invaliduser', function() {
-        console.log('|||||||||||||||||||Invalid user...put this on the dialog box');
-        //$scope.error = "Invalid user! Either your username or password is incorrect. Please retry";
-        $scope.error = "Invalid user! Please retry...";
-        //$scope.$broadcast('highchartsng.reflow');
-
-        
-        //$timeout( function() {        
-        //    var element = document.getElementById("chart1");
-        //    console.log(element);
-        //    $compile(element)($scope)
-        //}); 
-    });
 
 }

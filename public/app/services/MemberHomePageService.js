@@ -169,4 +169,50 @@ angular.module('ReviewINTEL').service('MemberHomePageService', function($http, $
 
         });
     };
+
+//===============
+
+
+this.getReviewSumOfUsefulBy = function(ASIN) {
+
+        return $http({
+            method: 'GET',
+            url: '/api/getReviewSumOfUsefulBy/' + ASIN
+        }).then(function(res) {
+
+            console.log("////////////////////////////Count of reviews by getReviewSumOfUsefulBy: ", res);
+            return res;
+
+        });
+    };
+
+this.getReviewSumOfUsefulOutOf = function(ASIN) {
+
+        return $http({
+            method: 'GET',
+            url: '/api/getReviewSumOfUsefulOutOf/' + ASIN
+        }).then(function(res) {
+
+            console.log("////////////////////////////Count of reviews by getReviewSumOfUsefulOutOf: ", res);
+            return res;
+
+        });
+    };
+
+
+this.getNumberOfReviewsByDate = function(ASIN) {
+
+        return $http({
+            method: 'GET',
+            url: '/api/getNumberOfReviewsByDate/' + ASIN
+        }).then(function(res) {
+
+            console.log("///////////////////////////Count of reviews by getNumberOfReviewsByDate: ", res);
+            return res;
+
+        });
+    };
+
+
+
 })

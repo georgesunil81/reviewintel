@@ -10,6 +10,15 @@ angular.module('ReviewINTEL').service('userService', function($http, $location, 
         });
     };
 
+    this.addDemoUser = function(newUser) {        
+        
+        return $http({
+            method: 'POST',
+            url: '/api/demoUserRegistration',
+            data: newUser
+        });
+    };
+
     this.login = function(credentials) {        
 
         var dfd = $q.defer()
@@ -18,6 +27,7 @@ angular.module('ReviewINTEL').service('userService', function($http, $location, 
             url: '/api/auth/local',
             data: credentials
         }).then(function(res) {
+            console.log("Login within userservice res=", res);
             dfd.resolve(res.data);
         });
         return dfd.promise;

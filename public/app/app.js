@@ -1,6 +1,21 @@
 // Application module
 var app = angular.module('ReviewINTEL', ['ui.router', 'ngMaterial', 'ngMessages', 'highcharts-ng']);
 
+
+
+app.run(['$rootScope', '$window', function($rootScope, $window) {
+        var timeout;
+
+        console.log("Window event listener for reflowing charts...");
+
+        $window.addEventListener('resize', function() {
+            clearTimeout(timeout);
+            timeout = setTimeout(function() {
+                $rootScope.$broadcast('window.resize');
+            }, 100);
+        });
+    }]);
+
 app.config(function($urlRouterProvider, $stateProvider, $httpProvider, $mdThemingProvider, $mdIconProvider) {
 
     $stateProvider
@@ -75,13 +90,16 @@ app.config(function($urlRouterProvider, $stateProvider, $httpProvider, $mdThemin
 
     $urlRouterProvider.otherwise('/landingpage');
 
-    $httpProvider.interceptors.push(function($q, $injector, $location) {
+    $httpProvider.interceptors.push(function($q, $injector, $location,$rootScope) {
         return {
             // This is the responseError interceptor
             responseError: function(rejection) {
                 console.log("BAD DOG", rejection);
                 if (rejection.status === 401) {
                     //document.location = "/#/login";
+
+                    $rootScope.$broadcast('invaliduser');
+
                     document.location = "/#/landingpage";
                 }
 
